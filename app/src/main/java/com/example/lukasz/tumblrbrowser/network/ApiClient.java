@@ -21,33 +21,43 @@ public class ApiClient implements IApiClient {
     private final static String TUMBRL_RESPONSE_VAR_NAME = "var tumblr_api_read = ";
 
     public void readPosts(String user, final IPostProvider postProvider) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://" + user + ".tumblr.com/api/").build();
-        ITumbrlApi tumbrlApiClient = retrofit.create(ITumbrlApi.class);
-        Call<ResponseBody> result = tumbrlApiClient.readUserPosts("photo");
-        result.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    postProvider.loadPosts(getReadResponseJson(response));
+        try {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl("http://" + user + ".tumblr.com/api/").build();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+            ITumbrlApi tumbrlApiClient = retrofit.create(ITumbrlApi.class);
+            Call<ResponseBody> result = tumbrlApiClient.readUserPosts("photo");
+            result.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        postProvider.loadPosts(getReadResponseJson(response));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                postProvider.reportNetworkError();
-                t.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    postProvider.reportNetworkError();
+                    t.printStackTrace();
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            postProvider.reportNetworkError();
+            e.printStackTrace();
+        }
     }
 
     private ReadResponseJson getReadResponseJson(Response<ResponseBody> response) throws IOException {
-        String responseJsonString = response.body().string().replace(TUMBRL_RESPONSE_VAR_NAME, "").trim();
-        responseJsonString = responseJsonString.substring(0, responseJsonString.length() - 1);
-        ObjectMapper objectMapper = new ObjectMapper();
-        ReadResponseJson readResponseJson = objectMapper.readValue(responseJsonString, ReadResponseJson.class);
+        ReadResponseJson readResponseJson = null;
+        ResponseBody responseBody = response.body();
+        if (responseBody != null) {
+            String responseJsonString = responseBody.string().replace(TUMBRL_RESPONSE_VAR_NAME, "").trim();
+            responseJsonString = responseJsonString.substring(0, responseJsonString.length() - 1);
+            ObjectMapper objectMapper = new ObjectMapper();
+            readResponseJson = objectMapper.readValue(responseJsonString, ReadResponseJson.class);
+        }
         return readResponseJson;
     }
 

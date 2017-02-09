@@ -9,5 +9,6 @@ public interface IMainActivityAccess {
     void openPost(String id, String photoCaption, String photoUrl);
     void loadPosts();
     void setSearchingInProgress(boolean isInProgress);
+    void showNetworkErrorToast();
 
 }

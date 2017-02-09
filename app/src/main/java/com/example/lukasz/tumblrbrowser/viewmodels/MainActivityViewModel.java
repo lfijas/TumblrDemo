@@ -45,7 +45,11 @@ public class MainActivityViewModel implements IPostProvider, IPostClickListener 
 
     @Override
     public void loadPosts(ReadResponseJson json) {
-        mData = json.getPosts();
+        if (json != null) {
+            mData = json.getPosts();
+        } else {
+            mData.clear();
+        }
         mActivityAccess.setSearchingInProgress(false);
         mActivityAccess.loadPosts();
     }
@@ -58,5 +62,6 @@ public class MainActivityViewModel implements IPostProvider, IPostClickListener 
     @Override
     public void reportNetworkError() {
         mActivityAccess.setSearchingInProgress(false);
+        mActivityAccess.showNetworkErrorToast();
     }
 }

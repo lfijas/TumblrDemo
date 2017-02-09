@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lukasz.tumblrbrowser.R;
 import com.example.lukasz.tumblrbrowser.adapters.PostAdapter;
@@ -81,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
             mBinding.searchingProgressLayout.setVisibility(View.GONE);
             mBinding.postsListRecyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void showNetworkErrorToast() {
+        Toast.makeText(MainActivity.this, "Network error", Toast.LENGTH_SHORT).show();
     }
 
 
