@@ -37,18 +37,26 @@ public class MainActivityViewModel implements IPostProvider, IPostClickListener 
 
     @Override
     public void searchUserPosts(String user) {
-        mApiClient.readPosts(user, this);
-
+        if (!"".equals(user)) {
+            mActivityAccess.setSearchingInProgress(true);
+            mApiClient.readPosts(user, this);
+        }
     }
 
     @Override
     public void loadPosts(ReadResponseJson json) {
         mData = json.getPosts();
+        mActivityAccess.setSearchingInProgress(false);
         mActivityAccess.loadPosts();
     }
 
     @Override
     public ArrayList<PostJson> getPosts() {
         return mData;
+    }
+
+    @Override
+    public void reportNetworkError() {
+        mActivityAccess.setSearchingInProgress(false);
     }
 }

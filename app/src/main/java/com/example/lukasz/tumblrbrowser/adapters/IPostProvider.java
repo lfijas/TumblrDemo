@@ -15,5 +15,6 @@ public interface IPostProvider {
     void searchUserPosts(String user);
     void loadPosts(ReadResponseJson json);
     ArrayList<PostJson> getPosts();
+    void reportNetworkError();
 
 }

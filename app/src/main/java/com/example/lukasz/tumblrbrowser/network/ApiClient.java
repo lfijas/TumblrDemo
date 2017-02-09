@@ -37,6 +37,7 @@ public class ApiClient implements IApiClient {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                postProvider.reportNetworkError();
                 t.printStackTrace();
             }
         });

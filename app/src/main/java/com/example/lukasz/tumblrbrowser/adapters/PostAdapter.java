@@ -3,7 +3,6 @@ package com.example.lukasz.tumblrbrowser.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mTextPostTitle.setText(Html.fromHtml(mDataset.get(position).getPhotoCaption()));
-        Picasso.with(mContext).load(mDataset.get(position).getPhotoUrl1280()).into(holder.mPostPhoto);
+        Picasso.with(mContext).load(mDataset.get(position).getPhotoUrl75()).into(holder.mPostPhoto);
         holder.mPostRow.setOnClickListener(new OnPostClickedListener(position));
     }
 
@@ -85,7 +84,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             String id = mDataset.get(mPosition).getId();
             String photoCaption = mDataset.get(mPosition).getPhotoCaption();
             String photoUrl = mDataset.get(mPosition).getPhotoUrl1280();
-            Log.i("lukasz", "l: " + id);
             mPostClickListener.postClicked(id, photoCaption, photoUrl);
         }
     }

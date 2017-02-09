@@ -2,11 +2,14 @@ package com.example.lukasz.tumblrbrowser.activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.example.lukasz.tumblrbrowser.R;
 import com.example.lukasz.tumblrbrowser.adapters.PostAdapter;
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
     private MainActivityViewModel mViewModel;
 
     private PostAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
         mLayoutManager = new LinearLayoutManager(this);
         mBinding.postsListRecyclerView.setLayoutManager(mLayoutManager);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.postsListRecyclerView.getContext(), mLayoutManager.getOrientation());
+        mBinding.postsListRecyclerView.addItemDecoration(dividerItemDecoration);
+
         mAdapter = new PostAdapter(mViewModel, mViewModel, MainActivity.this);
         mBinding.postsListRecyclerView.setAdapter(mAdapter);
 
@@ -41,6 +47,16 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
             @Override
             public void onClick(View view) {
                 mViewModel.searchUserPosts(mBinding.searchEditTxt.getText().toString());
+            }
+        });
+
+        mBinding.searchEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    mViewModel.searchUserPosts(mBinding.searchEditTxt.getText().toString());
+                }
+                return false;
             }
         });
     }
@@ -55,4 +71,17 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
     public void loadPosts() {
         mAdapter.loadPosts();
     }
+
+    @Override
+    public void setSearchingInProgress(boolean isInProgress) {
+        if (isInProgress) {
+            mBinding.searchingProgressLayout.setVisibility(View.VISIBLE);
+            mBinding.postsListRecyclerView.setVisibility(View.GONE);
+        } else {
+            mBinding.searchingProgressLayout.setVisibility(View.GONE);
+            mBinding.postsListRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 }

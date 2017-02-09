@@ -12,6 +12,7 @@ public class PostJson {
     String id;
     String photoCaption;
     String photoUrl1280;
+    String photoUrl75;
 
     public String getId() {
         return id;
@@ -39,5 +40,15 @@ public class PostJson {
     @JsonProperty(value = "photo-url-1280")
     public void setPhotoUrl1280(String photoUrl1280) {
         this.photoUrl1280 = photoUrl1280;
+    }
+
+    @JsonProperty(value = "photo-url-75")
+    public String getPhotoUrl75() {
+        return photoUrl75;
+    }
+
+    @JsonProperty(value = "photo-url-75")
+    public void setPhotoUrl75(String photoUrl75) {
+        this.photoUrl75 = photoUrl75;
     }
 }

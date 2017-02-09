@@ -6,11 +6,13 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
 
 import com.example.lukasz.tumblrbrowser.R;
 import com.example.lukasz.tumblrbrowser.databinding.ActivityPostDetailsBinding;
 import com.example.lukasz.tumblrbrowser.viewmodels.PostDetailsActivityViewModel;
 import com.example.lukasz.tumblrbrowser.viewmodels.interfaces.IPostDetailsActivityAccess;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class PostDetailsActivity extends AppCompatActivity implements IPostDetailsActivityAccess{
@@ -41,7 +43,19 @@ public class PostDetailsActivity extends AppCompatActivity implements IPostDetai
         String photoUrl = intent.getStringExtra(POST_PHOTO_URL);
 
         mBinding.captionTxtView.setText(Html.fromHtml(photoCaption));
-        Picasso.with(PostDetailsActivity.this).load(photoUrl).into(mBinding.photoImgView);
+        Picasso.with(PostDetailsActivity.this).load(photoUrl).into(mBinding.photoImgView, new Callback() {
+
+
+            @Override
+            public void onSuccess() {
+                mBinding.imgLoadingLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
 
         mViewModel = new PostDetailsActivityViewModel(this);
     }
