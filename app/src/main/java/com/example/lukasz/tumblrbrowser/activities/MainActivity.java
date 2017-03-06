@@ -38,33 +38,32 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
         mLayoutManager = new LinearLayoutManager(this);
         mBinding.postsListRecyclerView.setLayoutManager(mLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.postsListRecyclerView.getContext(), mLayoutManager.getOrientation());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding
+                .postsListRecyclerView.getContext(), mLayoutManager.getOrientation());
         mBinding.postsListRecyclerView.addItemDecoration(dividerItemDecoration);
 
         mAdapter = new PostAdapter(mViewModel, mViewModel, MainActivity.this);
         mBinding.postsListRecyclerView.setAdapter(mAdapter);
 
-        mBinding.searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewModel.searchUserPosts(mBinding.searchEditTxt.getText().toString());
-            }
+
+        mBinding.searchBtn.setOnClickListener(v -> {
+            mViewModel.searchUserPosts(mBinding.searchEditTxt.getText().toString());
         });
 
-        mBinding.searchEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE) {
-                    mViewModel.searchUserPosts(mBinding.searchEditTxt.getText().toString());
-                }
-                return false;
+        mBinding.searchEditTxt.setOnEditorActionListener((TextView textView, int i, KeyEvent
+                keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                mViewModel.searchUserPosts(mBinding.searchEditTxt.getText().toString());
             }
+            return false;
         });
+
     }
 
     @Override
     public void openPost(String id, String photoCaption, String photoUrl) {
-        Intent intent = PostDetailsActivity.createOpenPostDetailsIntent(MainActivity.this, id, photoCaption, photoUrl);
+        Intent intent = PostDetailsActivity.createOpenPostDetailsIntent(MainActivity.this, id,
+                photoCaption, photoUrl);
         startActivity(intent);
     }
 
