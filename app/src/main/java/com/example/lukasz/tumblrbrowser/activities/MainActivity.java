@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
                 .postsListRecyclerView.getContext(), mLayoutManager.getOrientation());
         mBinding.postsListRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        mAdapter = new PostAdapter(mViewModel, mViewModel, MainActivity.this);
+        mAdapter = new PostAdapter(mViewModel, mViewModel);
         mBinding.postsListRecyclerView.setAdapter(mAdapter);
 
 

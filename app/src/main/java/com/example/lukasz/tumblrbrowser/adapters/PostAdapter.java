@@ -1,17 +1,15 @@
 package com.example.lukasz.tumblrbrowser.adapters;
 
-import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.lukasz.tumblrbrowser.BR;
 import com.example.lukasz.tumblrbrowser.R;
 import com.example.lukasz.tumblrbrowser.network.jackson.PostJson;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -24,13 +22,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private ArrayList<PostJson> mDataset;
     private IPostClickListener mPostClickListener;
     private IPostProvider mPostProvider;
-    private Context mContext;
 
-    public PostAdapter(IPostClickListener postClickListener, IPostProvider postProvider, Context context) {
+    public PostAdapter(IPostClickListener postClickListener, IPostProvider postProvider) {
         mDataset = new ArrayList<>();
         mPostClickListener = postClickListener;
         mPostProvider = postProvider;
-        mContext = context;
     }
 
     @Override
@@ -43,9 +39,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mTextPostTitle.setText(Html.fromHtml(mDataset.get(position).getPhotoCaption()));
-        Picasso.with(mContext).load(mDataset.get(position).getPhotoUrl75()).into(holder.mPostPhoto);
-        holder.mPostRow.setOnClickListener(new OnPostClickedListener(position));
+        final PostJson post = mDataset.get(position);
+        holder.getBinding().setVariable(BR.post, post);
+        holder.getBinding().executePendingBindings();
+        holder.getBinding().getRoot().setOnClickListener(new OnPostClickedListener(position));
     }
 
     @Override
@@ -55,14 +52,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextPostTitle;
-        public ImageView mPostPhoto;
-        public View mPostRow;
+        private ViewDataBinding binding;
+
         public ViewHolder(View v) {
             super(v);
-            mTextPostTitle = (TextView) v.findViewById(R.id.post_row_title_txt_view);
-            mPostPhoto = (ImageView) v.findViewById(R.id.post_row_photo_img_view);
-            mPostRow = v;
+            binding = DataBindingUtil.bind(v);
+        }
+
+        public ViewDataBinding getBinding() {
+            return binding;
         }
     }
 

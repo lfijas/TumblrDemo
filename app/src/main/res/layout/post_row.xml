@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="@dimen/post_row_top_bottom_padding"
-              android:paddingBottom="@dimen/post_row_top_bottom_padding"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/post_row_photo_img_view"
-        android:layout_width="@dimen/post_row_thumbnail_size"
-        android:layout_height="@dimen/post_row_thumbnail_size"/>
-    
-    <TextView
-        android:id="@+id/post_row_title_txt_view"
+    <data>
+
+        <variable
+            name="post"
+            type="com.example.lukasz.tumblrbrowser.network.jackson.PostJson"/>
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/post_row_text_side_margin"
-        android:layout_marginRight="@dimen/post_row_text_side_margin"
-        android:ellipsize="end"
-        android:lines="1"
-        android:gravity="center_vertical"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/post_row_top_bottom_padding"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/post_row_top_bottom_padding">
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/post_row_photo_img_view"
+            android:layout_width="@dimen/post_row_thumbnail_size"
+            android:layout_height="@dimen/post_row_thumbnail_size"
+            app:imageUrl="@{post.photoUrl75}"/>
+
+        <TextView
+            android:id="@+id/post_row_title_txt_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/post_row_text_side_margin"
+            android:layout_marginRight="@dimen/post_row_text_side_margin"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            app:htmlText="@{post.photoCaption}"/>
+
+    </LinearLayout>
+
+</layout>
