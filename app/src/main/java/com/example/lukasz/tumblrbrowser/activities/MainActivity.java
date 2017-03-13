@@ -13,11 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lukasz.tumblrbrowser.R;
+import com.example.lukasz.tumblrbrowser.TumblrDemoApp;
 import com.example.lukasz.tumblrbrowser.adapters.PostAdapter;
 import com.example.lukasz.tumblrbrowser.databinding.ActivityMainBinding;
 import com.example.lukasz.tumblrbrowser.network.ApiClient;
 import com.example.lukasz.tumblrbrowser.viewmodels.MainActivityViewModel;
 import com.example.lukasz.tumblrbrowser.viewmodels.interfaces.IMainActivityAccess;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements IMainActivityAccess {
 
@@ -27,13 +30,17 @@ public class MainActivity extends AppCompatActivity implements IMainActivityAcce
     private PostAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
 
+    @Inject ApiClient mApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mBinding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
 
-        mViewModel = new MainActivityViewModel(this, new ApiClient());
+        ((TumblrDemoApp) getApplication()).getNetworkingComponent().inject(this);
+
+        mViewModel = new MainActivityViewModel(this, mApiClient);
 
         mLayoutManager = new LinearLayoutManager(this);
         mBinding.postsListRecyclerView.setLayoutManager(mLayoutManager);
